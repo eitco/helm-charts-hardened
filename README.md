@@ -1,3 +1,5 @@
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/eitco-spire-chart)](https://artifacthub.io/packages/search?repo=eitco-spire-chart)
+
 >  **Note**
 > Things to consider:
 > 1. We do not support running out of the git main branch. This is where development happens. Please use released versions via the published repo or git tags.
