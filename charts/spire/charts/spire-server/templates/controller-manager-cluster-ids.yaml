@@ -1,0 +1,68 @@
+{{- $root := . }}
+{{- range $key, $value := .Values.controllerManager.identities.clusterSPIFFEIDs }}
+{{-   range $skey, $svalue := $value }}
+{{-     if not (has $skey (list "name" "annotations" "labels" "enabled" "admin" "dnsNameTemplates" "downstream" "federatesWith" "jwtTTL" "namespaceSelector" "podSelector" "spiffeIDTemplate" "ttl" "workloadSelectorTemplates" "autoPopulateDNSNames")) }}
+{{-       fail (printf "Unsupported property specified: %s" $skey) }}
+{{-     end }}
+{{-   end }}
+{{-   range $rprop := list "spiffeIDTemplate" }}
+{{-     if not (hasKey $value $rprop) }}
+{{-       fail (printf "Required property %s was not specified" $rprop) }}
+{{-     end }}
+{{-   end }}
+{{-   if eq ($root.Values.controllerManager.enabled | toString) "true" }}
+{{-     if or (not (hasKey $value "enabled")) (eq ($value.enabled | toString) "true") }}
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: {{ $root.Release.Namespace }}-{{ $root.Release.Name }}-{{ $key }}
+  {{- with $value.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  className: {{ include "spire-server.controller-manager-class-name" $root | quote }}
+  spiffeIDTemplate: {{ $value.spiffeIDTemplate | quote }}
+  {{- with $value.federatesWith }}
+  federatesWith:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.podSelector }}
+  podSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.namespaceSelector }}
+  namespaceSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.dnsNameTemplates }}
+  dnsNameTemplates:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.workloadSelectorTemplates }}
+  workloadSelectorTemplates:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $value.ttl }}
+  ttl: {{ . | quote }}
+  {{- end }}
+  {{- with $value.jwtTTL }}
+  jwtTtl: {{ . | quote }}
+  {{- end }}
+  {{- with $value.admin }}
+  admin: {{ . }}
+  {{- end }}
+  {{- with $value.downstream }}
+  downstream: {{ . }}
+  {{- end }}
+  {{- with $value.autoPopulateDNSNames }}
+  autoPopulateDNSNames: {{ . }}
+  {{- end }}
+{{-     end }}
+{{-   end }}
+{{- end }}
