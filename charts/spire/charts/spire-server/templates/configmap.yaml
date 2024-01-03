@@ -83,7 +83,7 @@ plugins:
           - {{ include "spire-lib.cluster-name" $root }}:
             service_account_allow_list: {{ include "spire-server.serviceAccountAllowedList" $root | trim }}
           {{- range .remoteClusters }}
-          {{ .name }}:
+          - {{ .name }}:
             service_account_allow_list: {{ .serviceAccountAllowList | join ", " }}
           {{- end }}
   {{- end }}
