@@ -601,13 +601,28 @@ nodeAttestor:
     enabled: true
     ## @param nodeAttestor.k8sPsat.serviceAccountAllowList [array] Allowed service accounts for Psat nodeattestor
     serviceAccountAllowList: []
-    ## @param nodeAttestor.k8sPsat.remoteClusters [array] Add further clusters that should be managed by this spire-server instance
+    ## @param nodeAttestor.k8sPsat.remoteClusters [array] Add external clusters that should be managed by this spire-server instance
     ## This is required if you want to manage multiple remote clusters within one centralized spire-server
+    ## See https://github.com/spiffe/spire/blob/main/doc/plugin_server_nodeattestor_k8s_psat.md for more informations
     # remoteClusters:
     #  - name: remoteCluster1
-    #    serviceAccountAllowList: ["sa1", "sa2"]
+    #    serviceAccountAllowList:
+    #      - sa1
+    #      - sa2
+    #    kubeconfig: /run/spire/kubeconfigs/remoteCluster1
+    #    audience:
+    #      - spire-server
+    #    allowed_node_label_keys: []
+    #    allowed_pod_label_keys: []
     #  - name: remoteCluster2
-    #    serviceAccountAllowList: ["sa3", "sa4"]
+    #    serviceAccountAllowList:
+    #      - sa3
+    #      - sa4
+    #    kubeconfig: /run/spire/kubeconfigs/remoteCluster2
+    #    audience:
+    #      - spire-server
+    #    allowed_node_label_keys: []
+    #    allowed_pod_label_keys: []
     remoteClusters: []
 
 ## @section Tornjak
