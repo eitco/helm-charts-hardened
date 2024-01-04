@@ -6,6 +6,67 @@ entries:
       artifacthub.io/license: Apache-2.0
     apiVersion: v2
     appVersion: 1.8.5
+    created: "2024-01-04T10:34:48.24706509Z"
+    dependencies:
+    - condition: spire-server.enabled
+      name: spire-server
+      repository: file://./charts/spire-server
+      version: 0.1.0
+    - condition: spire-agent.enabled
+      name: spire-agent
+      repository: file://./charts/spire-agent
+      version: 0.1.0
+    - alias: upstream-spire-agent
+      condition: upstream.enabled
+      name: spire-agent
+      repository: file://./charts/spire-agent
+      version: 0.1.0
+    - condition: spiffe-csi-driver.enabled
+      name: spiffe-csi-driver
+      repository: file://./charts/spiffe-csi-driver
+      version: 0.1.0
+    - alias: upstream-spiffe-csi-driver
+      condition: upstream.enabled
+      name: spiffe-csi-driver
+      repository: file://./charts/spiffe-csi-driver
+      version: 0.1.0
+    - condition: spiffe-oidc-discovery-provider.enabled
+      name: spiffe-oidc-discovery-provider
+      repository: file://./charts/spiffe-oidc-discovery-provider
+      version: 0.1.0
+    - condition: tornjak-frontend.enabled
+      name: tornjak-frontend
+      repository: file://./charts/tornjak-frontend
+      version: 0.1.0
+    description: 'A Helm chart for deploying the complete Spire stack including: spire-server,
+      spire-agent, spiffe-csi-driver, spiffe-oidc-discovery-provider and spire-controller-manager. '
+    digest: 5e67cbeb5876683da1e11c29eb9f62634e06a11b5365c01c2df5d7dcc442283d
+    home: https://github.com/eitco/helm-charts/tree/main/charts/spire
+    icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
+    keywords:
+    - spiffe
+    - spire
+    - spire-server
+    - spire-agent
+    - oidc
+    - spire-controller-manager
+    kubeVersion: '>=1.21.0-0'
+    maintainers:
+    - email: github@eitco.de
+      name: eitco-github
+      url: https://github.com/eitco
+    name: spire
+    sources:
+    - https://github.com/eitco/helm-charts/tree/main/charts/spire
+    type: application
+    urls:
+    - https://github.com/eitco/helm-charts-hardened/releases/download/spire-0.17.5/spire-0.17.5.tgz
+    version: 0.17.5
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.8.5
     created: "2024-01-03T17:12:17.458755432Z"
     dependencies:
     - condition: spire-server.enabled
@@ -426,4 +487,4 @@ entries:
     urls:
     - .cr-release-packages/spire-crds-0.2.0.tgz
     version: 0.2.0
-generated: "2024-01-03T17:12:17.458782502Z"
+generated: "2024-01-04T10:34:48.247099143Z"
