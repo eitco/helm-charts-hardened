@@ -607,17 +607,30 @@ nodeAttestor:
     # remoteClusters:
     #  - name: remoteCluster1
     #    serviceAccountAllowList:
-    #      - sa1
-    #      - sa2
+    #      - ns:sa1
+    #      - ns:sa2
     #    kubeconfig: /run/spire/kubeconfigs/remoteCluster1
     #    audience:
     #      - spire-server
     #    allowed_node_label_keys: []
     #    allowed_pod_label_keys: []
+    #    preAuthorizedWorkflow:
+    #      namespace: default
+    #      serviceAccount: default
+    #      podName: eitco-init
+    #      federatesWith:
+    #        - awesome-cluster
+    #      x509SVIDTTL: 1h
+    #      jwtSVIDTTL: 1h
+    #      dnsNames:
+    #        - example.org
+    #      hint: "my-hint"
+    #      admin: false
+    #      downstream: false
     #  - name: remoteCluster2
     #    serviceAccountAllowList:
-    #      - sa3
-    #      - sa4
+    #      - ns:sa3
+    #      - ns:sa4
     #    kubeconfig: /run/spire/kubeconfigs/remoteCluster2
     #    audience:
     #      - spire-server
