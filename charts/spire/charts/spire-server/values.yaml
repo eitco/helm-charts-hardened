@@ -604,12 +604,13 @@ nodeAttestor:
     ## @param nodeAttestor.k8sPsat.remoteClusters [array] Add external clusters that should be managed by this spire-server instance
     ## This is required if you want to manage multiple remote clusters within one centralized spire-server
     ## See https://github.com/spiffe/spire/blob/main/doc/plugin_server_nodeattestor_k8s_psat.md for more informations
+    ## The kubeconfig will be mounted at /run/spire/kubeconfigs within the spire-server statefulset
     # remoteClusters:
     #  - name: remoteCluster1
     #    serviceAccountAllowList:
     #      - ns:sa1
     #      - ns:sa2
-    #    kubeconfig: /run/spire/kubeconfigs/remoteCluster1
+    #    kubeconfig: remoteCluster1
     #    audience:
     #      - spire-server
     #    allowed_node_label_keys: []
@@ -631,7 +632,7 @@ nodeAttestor:
     #    serviceAccountAllowList:
     #      - ns:sa3
     #      - ns:sa4
-    #    kubeconfig: /run/spire/kubeconfigs/remoteCluster2
+    #    kubeconfig: remoteCluster2
     #    audience:
     #      - spire-server
     #    allowed_node_label_keys: []

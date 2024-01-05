@@ -87,22 +87,22 @@ plugins:
           - {{ .name }}:
               service_account_allow_list: 
                 - {{ .serviceAccountAllowList | join ", " }}
-              kube_config_file: {{ .kubeconfig }}
+              kube_config_file: {{ printf "/run/spire/kubeconfigs/%s" .kubeconfig }}
               {{- with .audience }}
               audience: 
-                {{- range .audience}}
+                {{- range . }}
                   - {{ . | quote }}
                 {{- end }}
               {{- end }}
               {{- with .allowed_node_label_keys }}
               allowed_node_label_keys: 
-                {{- range .allowed_node_label_keys}}
+                {{- range . }}
                   - {{ . | quote }}
                 {{- end }}
               {{- end }}
               {{- with .allowed_pod_label_keys }}
               allowed_pod_label_keys: 
-                {{- range .allowed_pod_label_keys}}
+                {{- range . }}
                   - {{ . | quote }}
                 {{- end }}
               {{- end }}

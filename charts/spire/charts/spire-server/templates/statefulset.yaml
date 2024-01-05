@@ -186,6 +186,12 @@ spec:
             {{- if gt (len .Values.extraVolumeMounts) 0 }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
+            {{- with .Values.nodeAttestor.k8sPsat.remoteClusters }}
+            {{- range . }}
+            - name: {{ printf "%s-kubeconfig" .name }}
+              mountPath: {{ printf "/run/spire/kubeconfigs" }}
+            {{- end }}
+            {{- end }}
         {{- if eq (.Values.controllerManager.enabled | toString) "true" }}
         - name: spire-controller-manager
           securityContext:
@@ -396,6 +402,14 @@ spec:
         {{- end }}
         {{- end -}}
         {{- end -}}
+        {{- with .Values.nodeAttestor.k8sPsat.remoteClusters }}
+        {{- range . }}
+        - name: {{ printf "%s-kubeconfig" .name }}
+          secret:
+            defaultMode: 256
+            secretName: {{ printf "%s-kubeconfig" .name }}
+        {{- end }}
+        {{- end }}
   {{- if eq .Values.persistence.type "pvc" }}
   volumeClaimTemplates:
     - metadata:
