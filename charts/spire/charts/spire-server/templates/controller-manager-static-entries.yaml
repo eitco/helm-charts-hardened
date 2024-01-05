@@ -61,3 +61,84 @@ spec:
 {{-     end }}
 {{-   end }}
 {{- end }}
+{{/*The following template is only executed when you want to pre-authorize a workload of a remote cluster
+  by setting the preAuthorizedWorkflow key*/}}
+{{- with $root.Values.nodeAttestor.k8sPsat }}
+{{-   range .remoteClusters }}
+{{-     $name := .name }}
+{{-     with .preAuthorizedWorkflow }}
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterStaticEntry
+metadata:
+  name: {{ $root.Release.Namespace }}-{{ $root.Release.Name }}-{{ $name }}-node-alias
+spec:
+  className: {{ include "spire-server.controller-manager-class-name" $root | quote }}
+  spiffeID: {{ printf "spiffe://%s/%s-allnodes" $root.Values.global.spire.trustDomain $name | quote }}
+  {{- with .federatesWith }}
+  federatesWith:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selectors:
+    {{- printf "- k8s_psat:cluster:%s" $name | nindent 4 }}
+  parentID: {{ printf "spiffe://%s/spire/server" $root.Values.global.spire.trustDomain | quote }}
+  {{- with .dnsNames }}
+  dnsNames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .hint }}
+  hint: {{ . | quote }}
+  {{- end }}
+  {{- with .x509SVIDTTL }}
+  x509SVIDTTL: {{ . | quote }}
+  {{- end }}
+  {{- with .jwtSVIDTTL }}
+  jwtSVIDTTL: {{ . | quote }}
+  {{- end }}
+  {{- with .admin }}
+  admin: {{ . }}
+  {{- end }}
+  {{- with .downstream }}
+  downstream: {{ . }}
+  {{- end }}
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterStaticEntry
+metadata:
+  name: {{ $root.Release.Namespace }}-{{ $root.Release.Name }}-{{ $name }}-workload
+spec:
+  className: {{ include "spire-server.controller-manager-class-name" $root | quote }}
+  {{- if and .namespace .serviceAccount .podName }}
+  spiffeID: {{ printf "spiffe://%s/ns/%s/sa/%s" $root.Values.global.spire.trustDomain .namespace .serviceAccount | quote }}
+  {{- with .federatesWith }}
+  federatesWith:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selectors:
+    {{- printf "- k8s:ns:%s" .namespace | nindent 4 }}
+    {{- printf "- k8s:sa:%s" .serviceAccount | nindent 4 }}
+    {{- printf "- k8s:pod-name:%s" .podName | nindent 4 }}
+  {{- end }}
+  parentID: {{ printf "spiffe://%s/%s-allnodes" $root.Values.global.spire.trustDomain $name | quote }}
+  {{- with .dnsNames }}
+  dnsNames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .hint }}
+  hint: {{ . | quote }}
+  {{- end }}
+  {{- with .x509SVIDTTL }}
+  x509SVIDTTL: {{ . | quote }}
+  {{- end }}
+  {{- with .jwtSVIDTTL }}
+  jwtSVIDTTL: {{ . | quote }}
+  {{- end }}
+  {{- with .admin }}
+  admin: {{ . }}
+  {{- end }}
+  {{- with .downstream }}
+  downstream: {{ . }}
+  {{- end }}
+{{-     end }}
+{{-   end }}
+{{- end }}

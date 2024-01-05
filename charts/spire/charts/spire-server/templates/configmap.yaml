@@ -82,25 +82,25 @@ plugins:
         clusters:
           - {{ include "spire-lib.cluster-name" $root }}:
               service_account_allow_list: {{ include "spire-server.serviceAccountAllowedList" $root | trim }}
-          {{- if gt (len .remoteClusters) 0 }}
-          {{- range .remoteClusters }}
+          {{- with .remoteClusters }}
+          {{- range . }}
           - {{ .name }}:
               service_account_allow_list: 
                 - {{ .serviceAccountAllowList | join ", " }}
               kube_config_file: {{ .kubeconfig }}
-              {{- if gt (len .audience) 0 }}
+              {{- with .audience }}
               audience: 
                 {{- range .audience}}
                   - {{ . | quote }}
                 {{- end }}
               {{- end }}
-              {{- if gt (len .allowed_node_label_keys) 0 }}
+              {{- with .allowed_node_label_keys }}
               allowed_node_label_keys: 
                 {{- range .allowed_node_label_keys}}
                   - {{ . | quote }}
                 {{- end }}
               {{- end }}
-              {{- if gt (len .allowed_pod_label_keys) 0 }}
+              {{- with .allowed_pod_label_keys }}
               allowed_pod_label_keys: 
                 {{- range .allowed_pod_label_keys}}
                   - {{ . | quote }}
